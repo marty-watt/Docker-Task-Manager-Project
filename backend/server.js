@@ -3,6 +3,7 @@
     API endpoints that handle task operations:
 
     GET /api/tasks - Retrieve all tasks
+    Get /health - Health check endpoint
     POST /api/tasks - Create a new task
     PUT /api/tasks/:id/toggle - Mark task complete/incomplete
     DELETE /api/tasks/:id - Remove a task
@@ -20,9 +21,13 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://mongo:27017/taskmanager';
 
+const rateLimit = require('express-rate-limit');
+const helmet = require('helmet');
+
 // Middleware
 app.use(cors());
 app.use(express.json());
+app.use(helmet()); // Security headers
 
 // Task Schema
 const taskSchema = new mongoose.Schema({
@@ -41,6 +46,14 @@ const taskSchema = new mongoose.Schema({
 });
 
 const Task = mongoose.model('Task', taskSchema);
+
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // limit each IP to 100 requests per windowMs
+    message: 'Too many requests from this IP, please try again later.',
+    standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+    legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+});
 
 // Connect to MongoDB
 mongoose.connect(MONGODB_URI)
@@ -133,6 +146,8 @@ app.delete('/api/tasks/:id', async (req, res) => {
         res.status(400).json({ error: error.message });
     }
 });
+
+app.use('/api/', limiter);
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
