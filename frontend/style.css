@@ -1,3 +1,10 @@
+
+/*
+    Visual styling (purple gradient, white container, button colors)
+    Responsive design that looks good on different screen sizes
+    Styling for task items, buttons, and loading states
+*/
+
 * {
     margin: 0;
     padding: 0;

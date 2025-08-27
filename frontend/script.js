@@ -1,4 +1,10 @@
-﻿const API_URL = 'http://localhost:3001/api';
+﻿/* 
+    Handles user interactions (clicking buttons, pressing Enter)
+    Makes HTTP requests to the backend API
+    Updates the DOM when tasks are added/completed/deleted
+*/
+
+const API_URL = 'http://localhost:3001/api';
 let tasks = [];
 
 // Wait for the page to fully load before running our code

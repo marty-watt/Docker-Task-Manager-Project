@@ -9,3 +9,35 @@
 /.vs/task-manager-docker/CopilotIndices/17.14.995.13737
 /.vs/task-manager-docker/config
 *.sqlite
+
+# Dependencies
+node_modules/
+npm-debug.log*
+
+# Docker
+.dockerignore
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+logs
+*.log
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
