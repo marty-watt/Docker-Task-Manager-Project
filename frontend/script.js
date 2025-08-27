@@ -1,19 +1,37 @@
 ﻿const API_URL = 'http://localhost:3001/api';
 let tasks = [];
 
-// Load tasks when page loads
-document.addEventListener('DOMContentLoaded', loadTasks);
+// Wait for the page to fully load before running our code
+document.addEventListener('DOMContentLoaded', function () {
+    console.log('🚀 DOM loaded, initializing app...');
 
-// Add task with Enter key
-document.getElementById('taskInput').addEventListener('keypress', function (e) {
-    if (e.key === 'Enter') {
-        addTask();
+    // Now it's safe to access our elements
+    const taskInput = document.getElementById('taskInput');
+
+    if (taskInput) {
+        // Add task with Enter key
+        taskInput.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                addTask();
+            }
+        });
+        console.log('✅ Event listeners added');
     }
+
+    // Load tasks
+    loadTasks();
 });
 
 async function loadTasks() {
+    const taskListElement = document.getElementById('taskList');
+
+    if (!taskListElement) {
+        console.error('Task list element not found');
+        return;
+    }
+
     try {
-        document.getElementById('taskList').innerHTML = '<div class="loading">🐳 Loading tasks from Docker container...</div>';
+        taskListElement.innerHTML = '<div class="loading">🐳 Loading tasks from Docker container...</div>';
 
         const response = await fetch(`${API_URL}/tasks`);
         if (!response.ok) throw new Error('Failed to load tasks');
@@ -21,7 +39,7 @@ async function loadTasks() {
         tasks = await response.json();
         renderTasks();
     } catch (error) {
-        document.getElementById('taskList').innerHTML = `
+        taskListElement.innerHTML = `
             <div class="loading">
                 ❌ Cannot connect to backend container<br>
                 <small>Make sure Docker containers are running</small>
@@ -33,6 +51,8 @@ async function loadTasks() {
 
 async function addTask() {
     const input = document.getElementById('taskInput');
+    if (!input) return;
+
     const text = input.value.trim();
 
     if (!text) return;
@@ -86,6 +106,8 @@ async function deleteTask(id) {
 
 function renderTasks() {
     const taskList = document.getElementById('taskList');
+
+    if (!taskList) return;
 
     if (tasks.length === 0) {
         taskList.innerHTML = '<div class="loading">No tasks yet. Add one above! 📝</div>';

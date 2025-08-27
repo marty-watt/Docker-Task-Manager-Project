@@ -1,0 +1,11 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs/task-manager-docker/v17/DocumentLayout.json
+*.json
+/.vs/task-manager-docker/v17/.wsuo
+/.vs/task-manager-docker/FileContentIndex
+/.vs/task-manager-docker/CopilotIndices/17.14.995.13737
+/.vs/task-manager-docker/config
+*.sqlite
