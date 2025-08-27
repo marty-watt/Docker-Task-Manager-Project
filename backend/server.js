@@ -74,6 +74,25 @@ app.get('/api/tasks', async (req, res) => {
     }
 });
 
+// Health check endpoint
+app.get('/health', async (req, res) => {
+    try {
+        // Check database connection
+        await mongoose.connection.db.admin().ping();
+        res.status(200).json({
+            status: 'healthy',
+            timestamp: new Date().toISOString(),
+            uptime: process.uptime(),
+            database: 'connected'
+        });
+    } catch (error) {
+        res.status(503).json({
+            status: 'unhealthy',
+            error: error.message
+        });
+    }
+});
+
 // Create a task
 app.post('/api/tasks', async (req, res) => {
     try {

@@ -4,23 +4,21 @@
 ##	Exposes port 3001 for API traffic
 
 
-# Use official Node.js image
-FROM node:18-alpine
-
-# Set working directory inside container
+# Build stage
+FROM node:18-alpine AS builder
 WORKDIR /app
-
-# Copy package files
 COPY package*.json ./
+RUN npm ci --only=production && npm cache clean --force
 
-# Install dependencies
-RUN npm install
-
-# Copy source code
-COPY . .
-
-# Expose the port our app runs on
+# Production stage  
+FROM node:18-alpine AS production
+RUN addgroup -g 1001 -S nodejs
+RUN adduser -S nodeuser -u 1001
+WORKDIR /app
+COPY --from=builder --chown=nodeuser:nodejs /app/node_modules ./node_modules
+COPY --chown=nodeuser:nodejs . .
+USER nodeuser
 EXPOSE 3001
-
-# Command to run the app
-CMD ["npm", "start"]
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD node healthcheck.js
+CMD ["node", "server.js"]
