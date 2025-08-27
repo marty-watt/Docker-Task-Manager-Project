@@ -1,0 +1,27 @@
+<!DOCType html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Docker Task Manager</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Docker Task Manager</h1>
+        <div id="task-form">
+            <input type="text" id="task-input" placeholder="Enter a new task">
+            <button onclick="addTask()">Add Task</button>
+        </div>
+        <div id="tasklist" class="task-list">
+            <!-- Tasks will be loaded here -->
+        </div>
+    </div>
+
+    <footer>
+        <p>Built with Docker | <a href="https://github.com/marty-watt/Docker-Task-Manager-Project">View on GitHub</a></p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
